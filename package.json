@@ -1,0 +1,23 @@
+{
+  "name": "twitter_topk",
+  "version": "0.0.1",
+  "description": "Server analyzes hashtags and sends topK hashtags to client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rchakra3/TopKHashTags.git"
+  },
+  "author": "Rohan Chakravarthy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rchakra3/TopKHashTags/issues"
+  },
+  "homepage": "https://github.com/rchakra3/TopKHashTags",
+  "dependencies": {
+    "express": "^4.12.3",
+    "twit": "^1.1.20"
+  }
+}
