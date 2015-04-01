@@ -21,7 +21,9 @@ var server = app.listen(3000,function(){
 
 var twitter_stream=T.stream('statuses/sample');
 
-var my_linked_map=new hashMap(200);
+var tweet_window_size=100;
+
+var my_linked_map=new hashMap(tweet_window_size*3);
 
 var tweet_array=[];
 
@@ -29,24 +31,21 @@ console.log(my_linked_map.max_len)
 
 twitter_stream.on('tweet',function(tweet){
 	if(tweet.entities.hashtags.length>0 && tweet.user.lang==='en'){
-		/*tweet.entities.hashtags.forEach(function(hashtag){
-
-			var count=my_linked_map.get(hashtag.text).value;
-
-			if(count===null){
-				//console.log('new value:'+hashtag.text);
-				my_linked_map.put(hashtag.text,1);
-			}
-			else{
-				my_linked_map.put(hashtag.text,count+1);
-			}
-
-		})*/
 
 		tweet_array.push(tweet.entities.hashtags);
-		//console.log(tweet_array);
-		if(tweet_array.length>1000){
-			tweet_array.shift();
+
+		while(tweet_array.length>tweet_window_size){
+			var hashtags=tweet_array.shift();
+			//console.log('Deleting:'+hashtags);
+
+			hashtags.forEach(function(hashtag){
+				var count=my_linked_map.get(hashtag.text).value;
+				if(count!==null){
+					count-=1;
+					my_linked_map.put(hashtag.text,count);
+					//console.log('reduced count of:'+hashtag.text+' to '+count);
+				}
+			})
 		}
 
 	}
@@ -64,7 +63,6 @@ var print_map_id=setInterval(function(){
 			var count=my_linked_map.get(hashtag.text).value;
 
 			if(count===null){
-					//console.log('new value:'+hashtag.text);
 				my_linked_map.put(hashtag.text,1);
 			}
 			else{
@@ -78,7 +76,6 @@ var print_map_id=setInterval(function(){
 
 	for(var entry in my_linked_map.map){
 		freq_array.push([my_linked_map.map[entry].value,entry])
-		//console.log(entry+':'+my_linked_map.map[entry].value);
 	}
 
 	freq_array.sort(function(a,b){
@@ -96,5 +93,6 @@ var print_map_id=setInterval(function(){
 		console.log(freq_array[i]);
 	
 
+	console.log();
 
 },5000);
