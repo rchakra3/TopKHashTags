@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    div(class='container')
+        div(class='row')
+            span(class='col-lg-3') Update Frequency:
+            span(class='col-lg-3')
+                select(name='Time(seconds)' id='time_dropdown')
+                    option(value=1)=1
+                    option(value=5)=5
+                    option(value=10)=10
+                    option(value=15)=15
+        div(class="row")
+          div(class="col-lg-9")
+            div(class="topk-table-div")
+              table(id="topk-table-header" class="table table-bordered")
+                tr(class="topk-table-header")
+                  td(class="col-lg-2") Tweet
+          div(class="col-lg-9")
+            div(class="topk-table-div")
+              table(id="topk-table" class="table table-bordered")
+                tr(class="topk-table")
+          div(class="col-lg-9")
+          div(class="topk-table-div")
+            table(id="topk-table-display" class="table table-bordered")
+              tr(class="topk-table")
+
+block scripts
+    script(src='/socket.io/socket.io.js')
+    script(src='/javascripts/client_actions.js' type='text/javascript')
+    script(src='/javascripts/update_topk.js')

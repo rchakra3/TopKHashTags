@@ -2,16 +2,19 @@ var express = require('express');
 var Twit = require('twit')
 var hashMap = require('./lib/hashmap.js');
 var app=express();
+var path = require('path');
 
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.static(path.join(__dirname, 'public')));
 
 var twitconfig=require('./lib/config.js');
 var T=new Twit(twitconfig);
 
-
-
 app.get('/',function(request,response){
 
-	response.send("Welcome!");
+	 response.render('index', { title: 'Express' });
 });
 
 var server = app.listen(3000,function(){
@@ -21,7 +24,7 @@ var server = app.listen(3000,function(){
 
 var twitter_stream=T.stream('statuses/sample');
 
-var tweet_window_size=100;
+var tweet_window_size=1000;
 
 var my_linked_map=new hashMap(tweet_window_size*3);
 
@@ -52,9 +55,11 @@ twitter_stream.on('tweet',function(tweet){
 		
 })
 
+var io= require('socket.io')(server);
 
-var print_map_id=setInterval(function(){
+var time_interval=5;
 
+var print_map_function=function(socket){
 
 	tweet_array.forEach(function(entry){
 
@@ -69,7 +74,7 @@ var print_map_id=setInterval(function(){
 				my_linked_map.put(hashtag.text,count+1);
 			}
 			
-	})
+		})
 	});
 
 	var freq_array=[];
@@ -89,10 +94,36 @@ var print_map_id=setInterval(function(){
 
 	var counter=0;
 
-	for(var i=0;i<10;i++)
+	var topk_obj={}
+
+	for(var i=0;i<10;i++){
 		console.log(freq_array[i]);
-	
+		topk_obj[i]=freq_array[i];
+	}
+
+	//console.log('Just before emit.')
+	if(typeof socket !=='undefined'){
+		socket.emit('Update_top_k',topk_obj)
+	}
+
 
 	console.log();
 
-},5000);
+}
+
+var print_interval_id=setInterval(print_map_function,time_interval*1000);
+
+io.on('connection',function(socket){
+
+	socket.on('Changed_Value',function(changed_val){
+		console.log('received changed_val');
+		time_interval=parseInt(changed_val);
+		clearInterval(print_interval_id);
+		print_interval_id=setInterval(function(){print_map_function(socket)},time_interval*1000);
+	});
+})
+
+
+
+
+module.export = app;
