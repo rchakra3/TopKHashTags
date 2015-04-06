@@ -1,31 +1,50 @@
 extends layout
 
 block content
-    div(class='container')
+    div(class='container' id='wrap-inside')
         div(class='row')
-            span(class='col-lg-3') Update Frequency:
-            span(class='col-lg-3')
-                select(name='Time(seconds)' id='time_dropdown')
-                    option(value=1)=1
-                    option(value=5)=5
-                    option(value=10)=10
-                    option(value=15)=15
-        div(class="row")
-          div(class="col-lg-9")
-            div(class="topk-table-div")
-              table(id="topk-table-header" class="table table-bordered")
-                tr(class="topk-table-header")
-                  td(class="col-lg-2") Tweet
-          div(class="col-lg-9")
-            div(class="topk-table-div")
-              table(id="topk-table" class="table table-bordered")
-                tr(class="topk-table")
-          div(class="col-lg-9")
-          div(class="topk-table-div")
-            table(id="topk-table-display" class="table table-bordered")
-              tr(class="topk-table")
+          h1(class='text-center') Track the Top K Tweets
+        hr
+        div(class='row')
+          div(class='col-lg-4') Update Frequency:
+          div(class='col-lg-4')
+            input(type="text" id="freq_text_area" class='form-control input-small' placeholder="Update Frequency (Default:5 seconds)" readonly="readonly")
+          div(class='col-lg-4')
+           div(class="dropdown")
+            button(class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true") Select Interval
+              span(class="caret")
+            ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="dropdownMenuList")
+              li(value=1 role="presentation")
+                a(role="presentation" tabindex="-1" href="#") 1
+              li(value=1 role="presentation")
+                a(role="presentation" tabindex="-1" href="#") 5
+              li(value=1 role="presentation")
+                a(role="presentation" tabindex="-1" href="#") 10
+              li(value=1 role="presentation")
+                a(role="presentation" tabindex="-1" href="#") 15
+        div(class='row')
+          div(class='col-lg-4') Tweet Buffer Size:
+          div(class='col-lg-4')
+            input(type="text" id="buffer_size_text" class='form-control input-small' placeholder="Number of Tweets to track (Default:100)")
+          div(class='col-lg-4 input-group-btn')
+            button(type="button" id="buffer_size_button" class="btn btn-small btn-primary") Update Buffer Size
+        div(class='row')
+          div(class='col-lg-4') Top K:
+          div(class='col-lg-4')
+            input(type="text" id="k_text" class='form-control input-small' placeholder="Enter K(Default is 10)")
+          div(class='col-lg-4 input-group-btn')
+            button(type="button" id="k_button" class="btn btn-small btn-primary") Update K
+        div(class="controls controls-row row")
+          table(id="topk-table-display" class="table table-bordered")
+            tr
+              th Tweet
+              th Current Frequency
+
+
 
 block scripts
     script(src='/socket.io/socket.io.js')
-    script(src='/javascripts/client_actions.js' type='text/javascript')
+    script(src='/javascripts/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/client_actions.js')
     script(src='/javascripts/update_topk.js')

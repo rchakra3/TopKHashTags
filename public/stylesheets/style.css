@@ -1,0 +1,24 @@
+#wrap-inside {
+    border-top: 4px solid #ED2939;
+}
+
+#wrap-inside {
+    width: 940px;
+    padding: 10px;
+    float: center;
+    background: #FFFFFF;
+    border: 1px solid #e0e0e0;
+    border-top: 4px solid #3FA2C3;
+}
+
+#topk-table-display {
+	width: 50%;
+	padding: 10px;
+	margin: 0 auto;
+	margin-top: 10px;
+	float: center;
+}
+
+.row{
+	padding: 5px;
+}
