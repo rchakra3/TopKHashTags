@@ -26,28 +26,20 @@ var twitter_stream=T.stream('statuses/sample');
 
 var tweet_window_size=100;
 
-var my_linked_map=new hashMap(tweet_window_size*3);
+var my_linked_map=new hashMap();
 
 var tweet_array=[];
 
 var input_tto=0;
 var output_tto=0;
 
-//console.log(my_linked_map.max_len)
-
 twitter_stream.on('tweet',function(tweet){
-	//console.log(tweet);
 	if(tweet.entities.hashtags.length>0 && tweet.lang==='en'){
-
 		tweet_array.push(tweet.entities.hashtags);
-
-		while(tweet_array.length>tweet_window_size){
 		
-			var hashtags=tweet_array.shift();
-			
-
+		while(tweet_array.length>tweet_window_size){	
+			var hashtags=tweet_array.shift();	
 			hashtags.forEach(function(hashtag){
-
 				var count=my_linked_map.get(hashtag.text).value;
 				if(count!==null){
 					count-=1;
@@ -55,10 +47,7 @@ twitter_stream.on('tweet',function(tweet){
 				}
 			})
 		}
-		//console.log('Array length is now:'+tweet_array.length)
-
 	}
-		
 })
 
 var io= require('socket.io')(server);
